@@ -107,6 +107,17 @@ export const AdminDashboard = () => {
     }
   }, [isAuthenticated, statusFilter, searchQuery]);
 
+  // Auto-polling for new submissions
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    
+    const interval = setInterval(() => {
+      fetchApplications();
+    }, 10000); // Auto-poll every 10 seconds for real-time updates
+    
+    return () => clearInterval(interval);
+  }, [isAuthenticated, statusFilter, searchQuery]);
+
   // FALLBACK LOCAL STORAGE UTILITIES
   const loadLocalApplications = () => {
     // Check if there are local applications
@@ -505,7 +516,19 @@ export const AdminDashboard = () => {
           <span className="gold-text uppercase font-bold text-xs">Admin Control Center</span>
           <h1 className="gold-gradient-text">Constructor Control Console</h1>
         </div>
-        <button onClick={logoutAdmin} className="logout-btn">Log Out</button>
+        <div style={{ display: 'flex', gap: '0.75rem' }}>
+          <button 
+            onClick={() => {
+              fetchApplications();
+              fetchStructures();
+            }} 
+            className="logout-btn" 
+            style={{ borderColor: 'rgba(212, 175, 55, 0.4)', color: 'var(--accent-gold)' }}
+          >
+            🔄 Refresh
+          </button>
+          <button onClick={logoutAdmin} className="logout-btn">Log Out</button>
+        </div>
       </div>
 
       <div className="dashboard-layout">
