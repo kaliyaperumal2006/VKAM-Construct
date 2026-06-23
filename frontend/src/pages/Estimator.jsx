@@ -138,8 +138,10 @@ export const Estimator = () => {
       } else {
         // Fallback simulate submission if backend is offline
         console.warn('Backend failed, simulating mock success response.');
+        const ref = `BC-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
         const mockSuccess = {
-          referenceId: `BC-${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
+          _id: `mock-${ref}`,
+          referenceId: ref,
           clientName,
           clientEmail,
           clientPhone,
@@ -150,14 +152,23 @@ export const Estimator = () => {
           approximateCost,
           budgetMin,
           budgetMax,
-          status: 'Pending'
+          status: 'Pending',
+          createdAt: new Date().toISOString()
         };
+        
+        // Save to local storage
+        const localApps = JSON.parse(localStorage.getItem('my_local_applications') || '{}');
+        localApps[ref] = mockSuccess;
+        localStorage.setItem('my_local_applications', JSON.stringify(localApps));
+
         setSubmittedData(mockSuccess);
       }
     } catch (err) {
       console.warn('Backend offline, simulating mock success response.', err);
+      const ref = `BC-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
       const mockSuccess = {
-        referenceId: `BC-${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
+        _id: `mock-${ref}`,
+        referenceId: ref,
         clientName,
         clientEmail,
         clientPhone,
@@ -168,8 +179,15 @@ export const Estimator = () => {
         approximateCost,
         budgetMin,
         budgetMax,
-        status: 'Pending'
+        status: 'Pending',
+        createdAt: new Date().toISOString()
       };
+      
+      // Save to local storage
+      const localApps = JSON.parse(localStorage.getItem('my_local_applications') || '{}');
+      localApps[ref] = mockSuccess;
+      localStorage.setItem('my_local_applications', JSON.stringify(localApps));
+
       setSubmittedData(mockSuccess);
     } finally {
       setSubmitting(false);

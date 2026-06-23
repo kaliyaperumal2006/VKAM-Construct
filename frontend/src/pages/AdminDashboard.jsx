@@ -123,9 +123,10 @@ export const AdminDashboard = () => {
     // Check if there are local applications
     let localApps = JSON.parse(localStorage.getItem('my_local_applications') || '{}');
     let appList = Object.values(localApps);
+    const demoInitialized = localStorage.getItem('local_demo_initialized');
     
-    // Add default demo if empty
-    if (appList.length === 0) {
+    // Add default demo if empty and never initialized before
+    if (appList.length === 0 && !demoInitialized) {
       const defaultDemo = {
         _id: 'demo-12',
         referenceId: 'BC-DEMO12',
@@ -145,6 +146,7 @@ export const AdminDashboard = () => {
       };
       localApps[defaultDemo.referenceId] = defaultDemo;
       localStorage.setItem('my_local_applications', JSON.stringify(localApps));
+      localStorage.setItem('local_demo_initialized', 'true');
       appList = [defaultDemo];
     }
 
