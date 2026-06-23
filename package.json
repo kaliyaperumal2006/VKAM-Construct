@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Monorepo script orchestrator for VKAM Contruct Building Constructor full-stack site",
+  "engines": {
+    "node": ">=20.16.0"
+  },
   "scripts": {
     "install-all": "npm install --prefix backend && npm install --include=dev --prefix frontend",
     "build-frontend": "npm run build --prefix frontend",
