@@ -67,6 +67,13 @@ export const AdminDashboard = () => {
         headers: { Authorization: `Bearer ${adminToken}` }
       });
 
+      if (res.status === 401) {
+        console.warn('Stale/Invalid token, logging out.');
+        logoutAdmin();
+        window.location.hash = '#login';
+        return;
+      }
+
       if (res.ok) {
         const data = await res.json();
         setApplications(data);
