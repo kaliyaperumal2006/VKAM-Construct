@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
 
 const connectDB = async () => {
+  // If database is already connected or connecting, skip reconnection
+  if (mongoose.connection.readyState >= 1) {
+    return;
+  }
+
   try {
     const connStr = process.env.MONGODB_URI;
     
@@ -15,7 +20,10 @@ const connectDB = async () => {
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
     console.error(`MongoDB connection error: ${error.message}`);
-    process.exit(1);
+    if (!process.env.VERCEL) {
+      process.exit(1);
+    }
+    throw error;
   }
 };
 
